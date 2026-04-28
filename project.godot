@@ -1,0 +1,38 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="ERUPT"
+config/description="Eve Zed's Reliable Universal Pen&Paper Tool"
+run/main_scene="uid://tcr0pwd8wu2u"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="evezed/erupt"
+config/features=PackedStringArray("4.5", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+EventQueueUI="*res://scripts/UI/event_queue_ui.gd"
+SessionManager="*res://scripts/sessions_layer/session_manager.gd"
+ProfileManager="*res://scripts/network_layer/profile_manager.gd"
+NetworkManager="*res://scripts/network_layer/network_manager.gd"
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/window_width_override=1920
+window/size/window_height_override=1080
+window/stretch/mode="viewport"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://translations/translations.en.translation")

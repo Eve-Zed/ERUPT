@@ -1,0 +1,89 @@
+[gd_scene load_steps=8 format=3 uid="uid://tcr0pwd8wu2u"]
+
+[ext_resource type="Script" uid="uid://ho6gjpmlwxh8" path="res://scripts/UI/main_menu_manager.gd" id="1_wu84c"]
+[ext_resource type="Script" uid="uid://cfwaexuqo21rx" path="res://scripts/UI/button_controller.gd" id="2_8ln24"]
+[ext_resource type="PackedScene" uid="uid://cwy8sggkhrsmt" path="res://scenes/security_question.tscn" id="3_rtw2f"]
+[ext_resource type="PackedScene" uid="uid://uktq16q4tlnq" path="res://scenes/create_lobby.tscn" id="4_oa1go"]
+[ext_resource type="PackedScene" uid="uid://dilxa0yvm0j6j" path="res://scenes/join_lobby.tscn" id="5_8ln24"]
+[ext_resource type="PackedScene" uid="uid://idxjat64qndh" path="res://scenes/edit_profile.tscn" id="6_rtw2f"]
+[ext_resource type="PackedScene" uid="uid://c6ddusa6nfilg" path="res://scenes/edit_sessions.tscn" id="7_oa1go"]
+
+[node name="MainMenu" type="Node2D"]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="MainMenu" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wu84c")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MainMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.5
+offset_right = 64.0
+offset_bottom = 64.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ServerButton" type="Button" parent="UI/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "_CREATE_LOBBY"
+script = ExtResource("2_8ln24")
+
+[node name="ClientButton" type="Button" parent="UI/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "_JOIN_LOBBY"
+script = ExtResource("2_8ln24")
+action = 1
+
+[node name="ProfileButton" type="Button" parent="UI/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "_EDIT_PROFILE"
+script = ExtResource("2_8ln24")
+action = 2
+
+[node name="SessionsButton" type="Button" parent="UI/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "_SESSIONS"
+script = ExtResource("2_8ln24")
+action = 10
+
+[node name="QuitButton" type="Button" parent="UI/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "_QUIT"
+script = ExtResource("2_8ln24")
+action = 3
+
+[node name="QuitSQ" parent="UI" instance=ExtResource("3_rtw2f")]
+visible = false
+layout_mode = 1
+
+[node name="CreateLobby" parent="UI" instance=ExtResource("4_oa1go")]
+visible = false
+layout_mode = 1
+
+[node name="JoinLobby" parent="UI" instance=ExtResource("5_8ln24")]
+visible = false
+layout_mode = 1
+
+[node name="EditProfile" parent="UI" instance=ExtResource("6_rtw2f")]
+visible = false
+layout_mode = 1
+
+[node name="SessionEditor" parent="UI" instance=ExtResource("7_oa1go")]
+visible = false
+layout_mode = 1
