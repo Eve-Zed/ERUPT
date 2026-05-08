@@ -75,34 +75,57 @@ static func atomic_save(path: String, data: Variant) -> Error:
 	return OK
 
 static func load_json_file(path: String) -> String:
-	if path.is_empty() or not path.ends_with(".json"):
+	#if path.is_empty() or not path.ends_with(".json"):
+		#push_error(load_error_prefix + "Invalid path")
+		#load_error = ERR_FILE_BAD_PATH
+		#return ""
+	#
+	#if not FileAccess.file_exists(path):
+		#push_error(load_error_prefix + "Json file does not exist " + path)
+		#load_error = ERR_FILE_NOT_FOUND
+		#return ""
+	#
+	#var file := FileAccess.open(path,FileAccess.READ)
+	#if file == null:
+		#var open_err := FileAccess.get_open_error()
+		#push_error(load_error_prefix + "Could not open %s (%s)" % [path, open_err])
+		#load_error = open_err
+		#return ""
+		#
+	#var content := file.get_as_text()
+	#file.close()
+	var content = load_file(path).value
+	
+	if content != null:
+		var parsed = JSON.parse_string(content.to_string())
+		if parsed == null:
+			push_error(load_error_prefix + "Could not parse json " + path)
+			load_error = Error.ERR_PARSE_ERROR
+			return ""
+	
+		load_error = OK
+		return JSON.stringify(parsed)
+	return ""
+
+static func load_file(file_path: String) -> Result:
+	if file_path.is_empty() or not file_path.is_absolute_path():
 		push_error(load_error_prefix + "Invalid path")
-		load_error = ERR_FILE_BAD_PATH
-		return ""
+		return Result.new(ERR_FILE_BAD_PATH)
 	
-	if not FileAccess.file_exists(path):
-		push_error(load_error_prefix + "Json file does not exist " + path)
-		load_error = ERR_FILE_NOT_FOUND
-		return ""
+	if not FileAccess.file_exists(file_path):
+		push_error(load_error_prefix + "file does not exist " + file_path)
+		return Result.new(ERR_FILE_NOT_FOUND)	
 	
-	var file := FileAccess.open(path,FileAccess.READ)
+	var file := FileAccess.open(file_path,FileAccess.READ)
 	if file == null:
 		var open_err := FileAccess.get_open_error()
-		push_error(load_error_prefix + "Could not open %s (%s)" % [path, open_err])
-		load_error = open_err
-		return ""
-		
-	var content := file.get_as_text()
+		push_error(load_error_prefix + "Could not open %s (%s)" % [file_path, open_err])
+		return Result.new(open_err)
+	
+	var content := file.get_buffer(file.get_length())
 	file.close()
 	
-	var parsed = JSON.parse_string(content)
-	if parsed == null:
-		push_error(load_error_prefix + "Could not parse json " + path)
-		load_error = Error.ERR_PARSE_ERROR
-		return ""
-	
-	load_error = OK
-	return JSON.stringify(parsed)
+	return Result.new(OK, content)
 
 static func delete_file(path: String) -> Error:
 	var err := DirAccess.remove_absolute(path)

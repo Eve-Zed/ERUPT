@@ -55,3 +55,11 @@ func _get_sessions_from_disc() ->  Dictionary[String, String]:
 			if result.error == OK and result.value.has("id"):
 				session_dict[result.value["id"]] = SESSIONS_PATH.path_join(session)
 	return session_dict
+
+func save_file_in_session(file_path: String, session_id: String) -> Error:
+	#TODO Error handling
+	var content := FileUtils.load_file(file_path).value as PackedByteArray	
+	
+	var session := load_or_create_session(session_id).value as Session
+	session.cache.store_file(file_path.get_file(),content,1)
+	return OK
