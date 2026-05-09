@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://uktq16q4tlnq"]
+[gd_scene format=3 uid="uid://uktq16q4tlnq"]
 
 [ext_resource type="Script" uid="uid://c3gh6ur7w38ds" path="res://scripts/UI/lobby_creator.gd" id="1_xm0k0"]
 [ext_resource type="Script" uid="uid://cfwaexuqo21rx" path="res://scripts/UI/button_controller.gd" id="2_ts81x"]
@@ -9,7 +9,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ts81x"]
 
-[node name="CreateLobby" type="Control"]
+[node name="CreateLobby" type="Control" unique_id=882118568]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xm0k0")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1152138271]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -32,70 +32,70 @@ offset_bottom = 26.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=889193832]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1140491166]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1215274758]
 layout_mode = 2
 text = "_SERVER_ADDRESS"
 
-[node name="ServerAddress" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ServerAddress" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1803999909]
 layout_mode = 2
 text = "127.0.0.1:7000"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1652997024]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=966414855]
 layout_mode = 2
 text = "_PORT"
 
-[node name="VSeparator" type="VSeparator" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=844958036]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/separator = SubResource("StyleBoxEmpty_b1d45")
 
-[node name="PortSpinBox" type="SpinBox" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="PortSpinBox" type="SpinBox" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1266595132]
 layout_mode = 2
 min_value = 1024.0
 max_value = 65535.0
 value = 7000.0
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1933882377]
 layout_mode = 2
 theme_override_constants/separation = 16
 theme_override_styles/separator = SubResource("StyleBoxEmpty_xm0k0")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1987809815]
 layout_mode = 2
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1196003431]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/AspectRatioContainer"]
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/AspectRatioContainer" unique_id=11775759]
 layout_mode = 2
 text = "_CREATE_LOBBY"
 script = ExtResource("2_ts81x")
 action = 6
 
-[node name="VSeparator" type="VSeparator" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1356249698]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/separator = SubResource("StyleBoxEmpty_ts81x")
 
-[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1621278373]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/AspectRatioContainer2"]
+[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/AspectRatioContainer2" unique_id=1591917999]
 layout_mode = 2
 text = "_BACK"
 script = ExtResource("2_ts81x")

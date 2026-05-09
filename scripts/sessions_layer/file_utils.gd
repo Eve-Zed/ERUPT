@@ -3,7 +3,6 @@ class_name FileUtils
 
 static var save_error_prefix := "Failed to save file: "
 static var load_error_prefix := "Failed to load file: "
-static var load_error := OK
 
 static var hash_chunk_size = 1024
 
@@ -74,38 +73,21 @@ static func atomic_save(path: String, data: Variant) -> Error:
 	
 	return OK
 
-static func load_json_file(path: String) -> String:
-	#if path.is_empty() or not path.ends_with(".json"):
-		#push_error(load_error_prefix + "Invalid path")
-		#load_error = ERR_FILE_BAD_PATH
-		#return ""
-	#
-	#if not FileAccess.file_exists(path):
-		#push_error(load_error_prefix + "Json file does not exist " + path)
-		#load_error = ERR_FILE_NOT_FOUND
-		#return ""
-	#
-	#var file := FileAccess.open(path,FileAccess.READ)
-	#if file == null:
-		#var open_err := FileAccess.get_open_error()
-		#push_error(load_error_prefix + "Could not open %s (%s)" % [path, open_err])
-		#load_error = open_err
-		#return ""
-		#
-	#var content := file.get_as_text()
-	#file.close()
-	var content = load_file(path).value
+static func load_json_file(path: String) -> Result:
 	
-	if content != null:
-		var parsed = JSON.parse_string(content.to_string())
-		if parsed == null:
-			push_error(load_error_prefix + "Could not parse json " + path)
-			load_error = Error.ERR_PARSE_ERROR
-			return ""
+	var res = load_file(path)
 	
-		load_error = OK
-		return JSON.stringify(parsed)
-	return ""
+	if res.value == null:
+		return Result.new(res.error)
+		
+	var content = res.value.get_string_from_utf8()
+	var parsed = JSON.parse_string(content)
+	
+	if parsed == null:
+		push_error(load_error_prefix + "Could not parse json " + path)
+		return Result.new(ERR_PARSE_ERROR)
+
+	return Result.new(OK, JSON.stringify(parsed))
 
 static func load_file(file_path: String) -> Result:
 	if file_path.is_empty() or not file_path.is_absolute_path():

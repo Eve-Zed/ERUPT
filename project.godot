@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="ERUPT"
 config/description="Eve Zed's Reliable Universal Pen&Paper Tool"
-run/main_scene="uid://tcr0pwd8wu2u"
+run/main_scene="uid://leo62jkccmoy"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="evezed/erupt"
 config/features=PackedStringArray("4.6", "Forward Plus")

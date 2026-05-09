@@ -44,9 +44,10 @@ func save_registry() -> Error:
 	return FileUtils.atomic_save(json_path,registry_to_json())
 
 func load_registry() -> Error:
-	var json := FileUtils.load_json_file(json_path)
+	var res := FileUtils.load_json_file(json_path)
+	var json = res.value
 	if json.is_empty():
-		return FileUtils.load_error
+		return res.error
 	
 	var parsed = JSON.parse_string(json)
 	if parsed == null or typeof(parsed) != TYPE_DICTIONARY:

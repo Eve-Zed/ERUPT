@@ -205,9 +205,10 @@ static func load_session(path: String) -> Result:
 	return Result.new(OK,session)
 
 static func load_session_info(path: String) -> Result:
-	var json := FileUtils.load_json_file(path.path_join(SessionManager.INFO_NAME))
+	var res := FileUtils.load_json_file(path.path_join(SessionManager.INFO_NAME))
+	var json = res.value
 	if json.is_empty():
-		return Result.new(FileUtils.load_error)
+		return Result.new(res.error)
 	
 	var parsed = JSON.parse_string(json)
 	if parsed == null or typeof(parsed) != TYPE_DICTIONARY:
