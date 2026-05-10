@@ -3,4 +3,5 @@ extends Node
 
 
 func _ready() -> void:
-	print(FileUtils.load_json_file("user://sessions/ravnica__wings_of_dept/index.json").value)
+	
+	print(str(SessionManager.save_file_in_session("/home/evezed/Projects/Godot/ERUPT/icon.svg",SessionManager.sessions.keys()[0])))

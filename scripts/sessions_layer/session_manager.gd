@@ -10,6 +10,7 @@ const INFO_NAME := "session_info.json"
 
 var _sessions: Dictionary[String, String] = {} #Session_id -> Session_path
 var _num_sessions: int = 0
+var _active_session: Session = null #So the session doesn't need to be loaded with every operation
 
 var sessions: Dictionary[String, String]: 
 	get:
@@ -17,6 +18,11 @@ var sessions: Dictionary[String, String]:
 var num_sessions: int = 0:
 	get:
 		return _num_sessions
+var active_session_id: String:
+	get:
+		if _active_session == null:
+			return ""
+		return _active_session.session_id
 
 func _ready() -> void:
 	_sessions = _get_sessions_from_disc()
@@ -45,6 +51,38 @@ func load_or_create_session(id: String, session_name: String = "", description: 
 		return Result.new(err_)
 	return Result.new(OK,session_)
 
+func load_session(id: String) -> Result:
+	var res := Session.load_session(sessions[id])
+	if res.error != OK:
+		return Result.new(res.error)
+	var session = res.value as Session
+	return Result.new(OK, session)
+
+func save_file_in_session(file_path: String, session_id: String) -> Error:
+	if active_session_id != session_id:
+		var res := load_session(session_id)
+		if res.value == null:
+			return res.error
+		_active_session = res.value
+	
+	var lf_res := FileUtils.load_file(file_path)
+	if lf_res.value == null:
+		return lf_res.error
+	var content := lf_res.value as PackedByteArray	
+	
+	var err := _active_session.cache.store_file(
+		file_path.get_file(), content, FileUtils.get_file_priority(file_path))
+	if err != OK:
+		return err
+		
+	var sr_err := _active_session.cache.save_registry()
+	if sr_err != OK:
+		#cleanup if index.json can't be updated
+		_active_session.cache.delete_file(
+			file_path.get_file(),_active_session.cache.get_file_hash(file_path.get_file()))
+		return sr_err
+	return  OK
+
 func _get_sessions_from_disc() ->  Dictionary[String, String]:
 	var session_dict: Dictionary[String, String] = {}
 	var session_dirs := DirAccess.get_directories_at(SESSIONS_PATH)
@@ -55,11 +93,3 @@ func _get_sessions_from_disc() ->  Dictionary[String, String]:
 			if result.error == OK and result.value.has("id"):
 				session_dict[result.value["id"]] = SESSIONS_PATH.path_join(session)
 	return session_dict
-
-func save_file_in_session(file_path: String, session_id: String) -> Error:
-	#TODO Error handling
-	var content := FileUtils.load_file(file_path).value as PackedByteArray	
-	
-	var session := load_or_create_session(session_id).value as Session
-	session.cache.store_file(file_path.get_file(),content,1)
-	return OK

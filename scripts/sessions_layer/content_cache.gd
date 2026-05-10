@@ -37,6 +37,10 @@ func delete_file(file_name: String, file_hash: String) -> Error:
 		
 	return OK
 
+func get_file_hash(file_name: String) -> String:
+	#TODO actually implement method
+	return ""
+
 func _build_metadata(path: String, size: int, prio: int) -> FileMetadata:
 	var file_hash := FileUtils.hash_file(path)
 	if file_hash.is_empty():

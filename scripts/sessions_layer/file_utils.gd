@@ -146,3 +146,7 @@ static func sanitize_filename(filename: String, max_length: int = 64) -> String:
 			result += "_"
 	sanitized = result.substr(0, max_length)
 	return sanitized
+
+static func get_file_priority(file_path: String) -> int:
+	#TODO actually write this method
+	return 1
