@@ -134,10 +134,10 @@ static func hash_file(path) -> String:
 	
 	return res.hex_encode()
 
-static func sanitize_filename(filename: String, max_length: int = 64) -> String:
-	if filename.is_empty():
+static func sanitize_filename(file_name: String, max_length: int = 64) -> String:
+	if file_name.is_empty():
 		return "untitled"
-	var sanitized := filename.strip_edges().to_lower()
+	var sanitized := file_name.strip_edges().to_lower()
 	var result = ""
 	for c in sanitized:
 		if c.is_valid_filename() and c != ".":

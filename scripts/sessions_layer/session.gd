@@ -14,8 +14,8 @@ var _session_desc: String #Optional, user chosen
 var _preview_image_path: String #Optional, user chosen
 var _tags: Array[String] = [] #Optional, user chosen
 
-var _manifest: ContentManifest #Manifest, manages which files are shared with players
-var _cache: ContentCache #Index, shows which files are in the cache
+var _manifest: FileManifest #Manifest, manages which files are shared with players
+var _cache: FileCache #Index, shows which files are in the cache
 #endregion
 
 #region Getter and Setter
@@ -48,10 +48,10 @@ var tags: Array[String]:
 	set(value):
 		_tags = value.duplicate(true)
 
-var manifest: ContentManifest:
+var manifest: FileManifest:
 	get:
 		return _manifest
-var cache: ContentCache:
+var cache: FileCache:
 	get:
 		return _cache
 #endregion
@@ -105,14 +105,14 @@ func _create_new_on_disk() -> Error:
 		_session_path = final_path
 		return save_err
 	
-	_cache = ContentCache.new(_session_path)
+	_cache = FileCache.new(_session_path)
 	save_err = _cache.save_registry()
 	if save_err != OK:
 		_cleanup_temp(temp_path)
 		_session_path = final_path
 		return save_err
 	
-	var res := ContentManifest.generate_from_index(_cache)
+	var res := FileManifest.generate_from_index(_cache)
 	if res.error != OK:
 		_cleanup_temp(temp_path)
 		_session_path = final_path
@@ -192,12 +192,12 @@ static func load_session(path: String) -> Result:
 	if load_err != OK:
 		return Result.new(load_err)
 	
-	session._cache = ContentCache.new(session._session_path)
+	session._cache = FileCache.new(session._session_path)
 	load_err = session._cache.load_registry()
 	if load_err != OK:
 		return Result.new(load_err)
 	
-	var res = ContentManifest.generate_from_index(session._cache)
+	var res = FileManifest.generate_from_index(session._cache)
 	if res.error != OK:
 		return res
 	session._manifest = res.value
