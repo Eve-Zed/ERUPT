@@ -2,7 +2,7 @@ extends FileRegistry
 class_name FileCache
 
 func _init(path: String) -> void:
-	super(path, SessionManager.INDEX_NAME)
+	super(path, FileCacheManager.INDEX_NAME)
 
 func store_file(file_name: String, data: PackedByteArray, prio: int) -> Error:
 	var path := get_file_path(file_name)

@@ -28,6 +28,8 @@ EventQueueUI="*res://scripts/UI/event_queue_ui.gd"
 SessionManager="*res://scripts/sessions_layer/session_manager.gd"
 ProfileManager="*res://scripts/network_layer/profile_manager.gd"
 NetworkManager="*res://scripts/network_layer/network_manager.gd"
+FileManager="*uid://cpph6c77ivufj"
+FileCacheManager="*uid://db2xkw7r8xqor"
 
 [display]
 

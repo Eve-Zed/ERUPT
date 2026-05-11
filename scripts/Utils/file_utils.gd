@@ -147,6 +147,14 @@ static func sanitize_filename(file_name: String, max_length: int = 64) -> String
 	sanitized = result.substr(0, max_length)
 	return sanitized
 
+static func remove_recursive(directory: String) -> void:
+	for dir_name in DirAccess.get_directories_at(directory):
+		remove_recursive(directory.path_join(dir_name))
+	for file_name in DirAccess.get_files_at(directory):
+		DirAccess.remove_absolute(directory.path_join(file_name))
+		
+	DirAccess.remove_absolute(directory)
+
 static func get_file_priority(file_path: String) -> int:
 	#TODO actually write this method
 	return 1

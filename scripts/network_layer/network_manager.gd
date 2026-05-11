@@ -53,11 +53,11 @@ func remove_multiplayer_peer():
 @rpc("authority", "reliable")
 func receive_session_info(session_name: String, session_id: String, session_desc: String = "", tags: Array[String] = []) -> void:
 	print("Received session info:", session_name, session_id, " | ", multiplayer.get_unique_id())
-	var result := SessionManager.load_or_create_session(session_id, session_name, session_desc, tags)
-	if result.error != OK:
-		session_info_received.emit(false)
-		return 
-	session = result.value
+	#var result := SessionManager.load_or_create_session(session_id, session_name, session_desc, tags)
+	#if result.error != OK:
+		#session_info_received.emit(false)
+		#return 
+	#session = result.value
 	session_info_received.emit(true)
 
 @rpc("any_peer", "reliable")

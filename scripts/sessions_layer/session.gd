@@ -105,29 +105,29 @@ func _create_new_on_disk() -> Error:
 		_session_path = final_path
 		return save_err
 	
-	_cache = FileCache.new(_session_path)
-	save_err = _cache.save_registry()
-	if save_err != OK:
-		_cleanup_temp(temp_path)
-		_session_path = final_path
-		return save_err
-	
-	var res := FileManifest.generate_from_index(_cache)
-	if res.error != OK:
-		_cleanup_temp(temp_path)
-		_session_path = final_path
-		return res.error
-		
-	_manifest = res.value
-	save_err = _manifest.save_registry()
-	if save_err != OK:
-		_cleanup_temp(temp_path)
-		_session_path = final_path
-		return save_err
+	#_cache = FileCache.new(_session_path)
+	#save_err = _cache.save_registry()
+	#if save_err != OK:
+		#_cleanup_temp(temp_path)
+		#_session_path = final_path
+		#return save_err
+	#
+	#var res := FileManifest.generate_from_index(_cache)
+	#if res.error != OK:
+		#_cleanup_temp(temp_path)
+		#_session_path = final_path
+		#return res.error
+		#
+	#_manifest = res.value
+	#save_err = _manifest.save_registry()
+	#if save_err != OK:
+		#_cleanup_temp(temp_path)
+		#_session_path = final_path
+		#return save_err
 	
 	_session_path = final_path
-	_cache.root_path = final_path
-	_manifest.root_path = final_path
+	#_cache.root_path = final_path
+	#_manifest.root_path = final_path
 	var rename_err := DirAccess.rename_absolute(temp_path, final_path)
 	if rename_err != OK:
 		push_error("Failed to finalize session directory rename.")
@@ -178,7 +178,6 @@ static func create_session(name: String, id: String="") -> Result:
 	var err = session._create_new_on_disk()
 	if err != OK:
 		return Result.new(err)
-	SessionManager.register_session(session)
 	return Result.new(OK, session)
 
 static func load_session(path: String) -> Result:
@@ -192,15 +191,15 @@ static func load_session(path: String) -> Result:
 	if load_err != OK:
 		return Result.new(load_err)
 	
-	session._cache = FileCache.new(session._session_path)
-	load_err = session._cache.load_registry()
-	if load_err != OK:
-		return Result.new(load_err)
+	#session._cache = FileCache.new(session._session_path)
+	#load_err = session._cache.load_registry()
+	#if load_err != OK:
+		#return Result.new(load_err)
 	
-	var res = FileManifest.generate_from_index(session._cache)
-	if res.error != OK:
-		return res
-	session._manifest = res.value
+	#var res = FileManifest.generate_from_index(session._cache)
+	#if res.error != OK:
+		#return res
+	#session._manifest = res.value
 	
 	return Result.new(OK,session)
 
@@ -218,7 +217,7 @@ static func load_session_info(path: String) -> Result:
 	if not parsed.has_all(INFO_KEYS):
 		push_error("Failed to load session info: Invalid or missing data")
 		return Result.new(ERR_INVALID_DATA)
-	
+
 	return Result.new(OK,parsed)
 #endregion
 	
