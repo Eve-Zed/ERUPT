@@ -86,11 +86,14 @@ func _create_new_on_disk() -> Error:
 		if err != OK:
 			push_error("Failed to create temp session directory: " + temp_path)
 			return err
-		
+	
+	_path = temp_path
 	var save_err := save_session_info()
 	if save_err != OK:
 		_cleanup_temp(temp_path)
+		_path = final_path
 		return save_err
+	_path = final_path
 	
 	var rename_err := DirAccess.rename_absolute(temp_path, final_path)
 	if rename_err != OK:
@@ -117,21 +120,21 @@ func _load_session_info() -> Error:
 		add_tag(tag)
 	return OK
 
-func _setup_new(name: String, s_id: String) -> void:
+func _setup_new(name: String, session_id: String) -> void:
 	_session_name = name
 	if name.is_empty():
 		_session_name = "Session"
-	_id = s_id
-	if s_id.is_empty():
+	_id = session_id
+	if session_id.is_empty():
 		_id = FileUtils.generate_uuid_v4()
 	
 	var safe_name := FileUtils.sanitize_filename(_session_name)
 	var base_path := SessionManager.SESSIONS_PATH.path_join(safe_name)
 	var session_path := base_path
-	var session_id := 1
+	var num := 1
 	while DirAccess.dir_exists_absolute(session_path):
-		session_path = base_path + "(" + str(session_id) + ")"
-		session_id += 1
+		session_path = base_path + "(" + str(num) + ")"
+		num += 1
 	_path = session_path
 #endregion
 
