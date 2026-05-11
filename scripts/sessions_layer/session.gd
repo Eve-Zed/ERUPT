@@ -8,34 +8,31 @@ const MAX_DESC_LENGHT := 256
 
 #region Variables
 var _session_name: String #User chosen, not unique
-var _session_id: String #Generated UUID, unique
-var _session_path: String #Folder for all session files
-var _session_desc: String #Optional, user chosen
+var _id: String #Generated UUID, unique
+var _path: String #Folder for all session files
+var _description: String #Optional, user chosen
 var _preview_image_path: String #Optional, user chosen
 var _tags: Array[String] = [] #Optional, user chosen
-
-var _manifest: FileManifest #Manifest, manages which files are shared with players
-var _cache: FileCache #Index, shows which files are in the cache
 #endregion
 
 #region Getter and Setter
 var session_name: String:
 	get:
 		return _session_name
-var session_id: String:
+var id: String:
 	get:
-		return _session_id
-var session_path: String:
+		return _id
+var path: String:
 	get:
-		return _session_path
+		return _path
 var info_path: String: #path for session info file
 	get:
-		return _session_path.path_join(SessionManager.INFO_NAME)
-var session_desc: String:
+		return _path.path_join(SessionManager.INFO_NAME)
+var description: String:
 	get:
-		return _session_desc
+		return _description
 	set(value):
-		_session_desc = value.substr(0, MAX_DESC_LENGHT)
+		_description = value.substr(0, MAX_DESC_LENGHT)
 var preview_image_path: String:
 	get:
 		return _preview_image_path
@@ -47,13 +44,6 @@ var tags: Array[String]:
 		return _tags.duplicate(true)
 	set(value):
 		_tags = value.duplicate(true)
-
-var manifest: FileManifest:
-	get:
-		return _manifest
-var cache: FileCache:
-	get:
-		return _cache
 #endregion
 
 #region Public Methods
@@ -65,8 +55,8 @@ func remove_tag(tag: String) -> void:
 
 func save_session_info() -> Error:
 	var data := {"name": _session_name,
-				"id": _session_id,
-				"desc": _session_desc,
+				"id": _id,
+				"desc": _description,
 				"preview": _preview_image_path,
 				"tags": _tags} 
 	return FileUtils.atomic_save(info_path,JSON.stringify(data))
@@ -75,7 +65,7 @@ func update_session_info(s_name: String = "", s_desc: String = "", s_tags: Array
 	if not s_name.is_empty():
 		session_name = s_name
 	if not s_desc.is_empty():
-		session_desc = s_desc
+		description = s_desc
 	if not tags.is_empty():
 		tags = s_tags
 	return save_session_info()
@@ -83,7 +73,7 @@ func update_session_info(s_name: String = "", s_desc: String = "", s_tags: Array
 
 #region Private Methods
 func _create_new_on_disk() -> Error:
-	var final_path := _session_path
+	var final_path := _path
 	var temp_path := final_path + ".tmp"
 	
 	if DirAccess.dir_exists_absolute(temp_path):
@@ -91,43 +81,17 @@ func _create_new_on_disk() -> Error:
 		if err != OK:
 			return err
 
-	if not DirAccess.dir_exists_absolute(_session_path):
+	if not DirAccess.dir_exists_absolute(_path):
 		var err := DirAccess.make_dir_recursive_absolute(temp_path)
 		if err != OK:
 			push_error("Failed to create temp session directory: " + temp_path)
 			return err
-	
-	_session_path = temp_path
-	
+		
 	var save_err := save_session_info()
 	if save_err != OK:
 		_cleanup_temp(temp_path)
-		_session_path = final_path
 		return save_err
 	
-	#_cache = FileCache.new(_session_path)
-	#save_err = _cache.save_registry()
-	#if save_err != OK:
-		#_cleanup_temp(temp_path)
-		#_session_path = final_path
-		#return save_err
-	#
-	#var res := FileManifest.generate_from_index(_cache)
-	#if res.error != OK:
-		#_cleanup_temp(temp_path)
-		#_session_path = final_path
-		#return res.error
-		#
-	#_manifest = res.value
-	#save_err = _manifest.save_registry()
-	#if save_err != OK:
-		#_cleanup_temp(temp_path)
-		#_session_path = final_path
-		#return save_err
-	
-	_session_path = final_path
-	#_cache.root_path = final_path
-	#_manifest.root_path = final_path
 	var rename_err := DirAccess.rename_absolute(temp_path, final_path)
 	if rename_err != OK:
 		push_error("Failed to finalize session directory rename.")
@@ -136,18 +100,18 @@ func _create_new_on_disk() -> Error:
 	
 	return OK
 
-func _cleanup_temp(path: String) -> void:
-	if DirAccess.dir_exists_absolute(path):
-		DirAccess.remove_absolute(path)
+func _cleanup_temp(temp_path: String) -> void:
+	if DirAccess.dir_exists_absolute(temp_path):
+		DirAccess.remove_absolute(temp_path)
 
 func _load_session_info() -> Error:
-	var res := load_session_info(session_path)
+	var res := load_session_info(path)
 	if res.error != OK:
 		return res.error
 	var parsed = res.value
 	_session_name = parsed["name"]
-	_session_id = parsed["id"]
-	_session_desc = parsed["desc"]
+	_id = parsed["id"]
+	_description = parsed["desc"]
 	_preview_image_path = parsed["preview"]
 	for tag in parsed["tags"]:
 		add_tag(tag)
@@ -157,54 +121,44 @@ func _setup_new(name: String, s_id: String) -> void:
 	_session_name = name
 	if name.is_empty():
 		_session_name = "Session"
-	_session_id = s_id
+	_id = s_id
 	if s_id.is_empty():
-		_session_id = FileUtils.generate_uuid_v4()
+		_id = FileUtils.generate_uuid_v4()
 	
 	var safe_name := FileUtils.sanitize_filename(_session_name)
 	var base_path := SessionManager.SESSIONS_PATH.path_join(safe_name)
-	var path := base_path
-	var id := 1
-	while DirAccess.dir_exists_absolute(path):
-		path = base_path + "(" + str(id) + ")"
-		id += 1
-	_session_path = path
+	var session_path := base_path
+	var session_id := 1
+	while DirAccess.dir_exists_absolute(session_path):
+		session_path = base_path + "(" + str(session_id) + ")"
+		session_id += 1
+	_path = session_path
 #endregion
 
 #region Static Methods
-static func create_session(name: String, id: String="") -> Result:
+static func create_session(name: String, session_id: String="") -> Result:
 	var session := Session.new()
-	session._setup_new(name, id)
+	session._setup_new(name, session_id)
 	var err = session._create_new_on_disk()
 	if err != OK:
 		return Result.new(err)
 	return Result.new(OK, session)
 
-static func load_session(path: String) -> Result:
-	if path.is_empty() or not DirAccess.dir_exists_absolute(path):
+static func load_session(session_path: String) -> Result:
+	if session_path.is_empty() or not DirAccess.dir_exists_absolute(session_path):
 		push_error("Failed to load session: invalid path")
 		return Result.new(ERR_FILE_BAD_PATH)
 	
 	var session = Session.new()
-	session._session_path = path
+	session._path = session_path
 	var load_err := session._load_session_info()
 	if load_err != OK:
 		return Result.new(load_err)
 	
-	#session._cache = FileCache.new(session._session_path)
-	#load_err = session._cache.load_registry()
-	#if load_err != OK:
-		#return Result.new(load_err)
-	
-	#var res = FileManifest.generate_from_index(session._cache)
-	#if res.error != OK:
-		#return res
-	#session._manifest = res.value
-	
 	return Result.new(OK,session)
 
-static func load_session_info(path: String) -> Result:
-	var res := FileUtils.load_json_file(path.path_join(SessionManager.INFO_NAME))
+static func load_session_info(session_path: String) -> Result:
+	var res := FileUtils.load_json_file(session_path.path_join(SessionManager.INFO_NAME))
 	var json = res.value
 	if json.is_empty():
 		return Result.new(res.error)

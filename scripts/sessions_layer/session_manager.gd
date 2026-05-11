@@ -3,19 +3,17 @@ extends Node
 const SESSIONS_PATH := "user://sessions"
 const INFO_NAME := "session_info.json"
 
-const CREATE_SESSION_ERROR := "Could not create session: "
-
-var _sessions: Dictionary[String, String] = {} 	#Session_id -> Session_path
+var _sessions: Dictionary[String, String] = {} 	#id -> path
 var _active_session: Session = null 			#So the session doesn't need to be loaded with every operation
 
 var sessions: Dictionary[String, String]: 
 	get:
 		return _sessions.duplicate(true)
-var active_session_id: String:
+var active_id: String:
 	get:
 		if _active_session == null:
 			return ""
-		return _active_session.session_id
+		return _active_session.id
 var active_session: Session:
 	get:
 		return _active_session
@@ -26,13 +24,13 @@ func _ready() -> void:
 func create_session(session_name: String) -> Error:
 	var res := Session.create_session(session_name)
 	if res.error != OK:
-		push_error(CREATE_SESSION_ERROR + error_string(res.error))
+		push_error("Could not create session: " + error_string(res.error))
 		return res.error
 	var session := res.value as Session
-	_sessions[session.session_id] = session.session_path
+	_sessions[session.id] = session.path
 	_active_session = session
 	Changelog.log("sessions.log","Created new session %s with ID %s at %s" % 
-	[session.session_name, session.session_id, session.session_path])
+	[session.session_name, session.id, session.path])
 	return OK
 
 func load_session(id: String) -> Result:
@@ -46,7 +44,7 @@ func delete_session(id: String) -> Error:
 	FileUtils.remove_recursive(sessions[id])
 	Changelog.log("sessions.log","Deleted session with ID %s at %s" % [id, sessions[id]])
 	_sessions.erase(id)
-	if active_session_id == id:
+	if active_id == id:
 		_active_session = null
 	return OK
 

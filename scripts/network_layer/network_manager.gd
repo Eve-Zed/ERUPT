@@ -51,9 +51,9 @@ func remove_multiplayer_peer():
 	players.clear()
 
 @rpc("authority", "reliable")
-func receive_session_info(session_name: String, session_id: String, session_desc: String = "", tags: Array[String] = []) -> void:
-	print("Received session info:", session_name, session_id, " | ", multiplayer.get_unique_id())
-	#var result := SessionManager.load_or_create_session(session_id, session_name, session_desc, tags)
+func receive_session_info(session_name: String, id: String, description: String = "", tags: Array[String] = []) -> void:
+	print("Received session info:", session_name, id, " | ", multiplayer.get_unique_id())
+	#var result := SessionManager.load_or_create_session(id, session_name, description, tags)
 	#if result.error != OK:
 		#session_info_received.emit(false)
 		#return 
@@ -63,7 +63,7 @@ func receive_session_info(session_name: String, session_id: String, session_desc
 @rpc("any_peer", "reliable")
 func request_session_info():
 	if multiplayer.is_server():
-		receive_session_info.rpc_id(multiplayer.get_remote_sender_id(), session.session_name, session.session_id, session.session_desc, session.tags)
+		receive_session_info.rpc_id(multiplayer.get_remote_sender_id(), session.session_name, session.id, session.description, session.tags)
 
 func _on_player_connected(id) -> void:
 	_register_player.rpc_id(id, ProfileManager.player_info)
