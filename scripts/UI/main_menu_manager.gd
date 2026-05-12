@@ -15,7 +15,7 @@ enum Menus {
 @onready var create_lobby: Control = $"../CreateLobby"
 @onready var join_lobby: Control = $"../JoinLobby"
 @onready var edit_profile: Control = $"../EditProfile"
-@onready var session_editor: Control = $"../SessionEditor"
+@onready var campaign_editor: Control = $"../CampaignEditor"
 
 
 func _ready() -> void:
@@ -24,7 +24,7 @@ func _ready() -> void:
 	EventQueueUI.create_lobby_opened.connect(_open_create_lobby)
 	EventQueueUI.join_lobby_opened.connect(_open_join_lobby)
 	EventQueueUI.profile_opened.connect(_open_edit_profile)
-	EventQueueUI.sessions_opened.connect(_open_session_editor)
+	EventQueueUI.campaigns_opened.connect(_open_campaign_editor)
 
 func _show_security_question(pos_action: EventQueueUI.UIAction, neg_action: EventQueueUI.UIAction, text: String) -> void:
 	var sq = security_question as SecurityQuestion
@@ -45,7 +45,7 @@ func _open_join_lobby() -> void:
 func _open_edit_profile() -> void:
 	_show_Menu(Menus.PROFILE_MENU)
 
-func _open_session_editor() -> void:
+func _open_campaign_editor() -> void:
 	_show_Menu(Menus.SESSION_EDITOR)
 
 func _show_Menu(menu: Menus) -> void:
@@ -54,4 +54,4 @@ func _show_Menu(menu: Menus) -> void:
 	create_lobby.visible = menu == Menus.CREATE_LOBBY_MENU
 	join_lobby.visible = menu == Menus.JOIN_LOBBY_MENU
 	edit_profile.visible = menu == Menus.PROFILE_MENU
-	session_editor.visible = menu == Menus.SESSION_EDITOR
+	campaign_editor.visible = menu == Menus.SESSION_EDITOR

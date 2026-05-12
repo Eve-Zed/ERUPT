@@ -15,11 +15,11 @@ func _process(_delta: float) -> void:
 
 func _on_start_game() -> void:
 	var path := ""
-	for session in SessionManager.sessions:
-		path = SessionManager.sessions[session]
-	var result = Session.load_session(path)
+	for campaign in CampaignManager.campaigns:
+		path = CampaignManager.campaigns[campaign]
+	var result = Campaign.load_campaign(path)
 	if result.error != OK:
-		push_error("Failed to create Lobby: Could not load session")
+		push_error("Failed to create Lobby: Could not load campaign")
 		return 
-	NetworkManager.host_session(result.value, int(port.value))
+	NetworkManager.host_campaign(result.value, int(port.value))
 	get_tree().change_scene_to_packed(GAME)

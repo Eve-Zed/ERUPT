@@ -1,33 +1,33 @@
 extends Resource
-class_name Session
+class_name Campaign
 
 #region Constants
-const INFO_KEYS := ["name","id","desc","preview","tags"] #keys for session info file
+const INFO_KEYS := ["name","id","desc","preview","tags"] #keys for campaign info file
 const MAX_DESC_LENGHT := 256
 #endregion
 
 #region Variables
-var _session_name: String #User chosen, not unique
+var _campaign_name: String #User chosen, not unique
 var _id: String #Generated UUID, unique
-var _path: String #Folder for all session files
+var _path: String #Folder for all campaign files
 var _description: String #Optional, user chosen
 var _preview_image_path: String #Optional, user chosen
 var _tags: Array[String] = [] #Optional, user chosen
 #endregion
 
 #region Getter and Setter
-var session_name: String:
+var campaign_name: String:
 	get:
-		return _session_name
+		return _campaign_name
 var id: String:
 	get:
 		return _id
 var path: String:
 	get:
 		return _path
-var info_path: String: #path for session info file
+var info_path: String: #path for campaign info file
 	get:
-		return _path.path_join(SessionManager.INFO_NAME)
+		return _path.path_join(CampaignManager.INFO_NAME)
 var description: String:
 	get:
 		return _description
@@ -53,22 +53,22 @@ func add_tag(tag: String) -> void:
 func remove_tag(tag: String) -> void:
 	_tags.erase(tag)
 
-func save_session_info() -> Error:
-	var data := {"name": _session_name,
+func save_campaign_info() -> Error:
+	var data := {"name": _campaign_name,
 				"id": _id,
 				"desc": _description,
 				"preview": _preview_image_path,
 				"tags": _tags} 
 	return FileUtils.atomic_save(info_path,JSON.stringify(data))
 
-func update_session_info(s_name: String = "", s_desc: String = "", s_tags: Array[String] = []) -> Error:
+func update_campaign_info(s_name: String = "", s_desc: String = "", s_tags: Array[String] = []) -> Error:
 	if not s_name.is_empty():
-		session_name = s_name
+		campaign_name = s_name
 	if not s_desc.is_empty():
 		description = s_desc
 	if not tags.is_empty():
 		tags = s_tags
-	return save_session_info()
+	return save_campaign_info()
 #endregion
 
 #region Private Methods
@@ -84,11 +84,11 @@ func _create_new_on_disk() -> Error:
 	if not DirAccess.dir_exists_absolute(_path):
 		var err := DirAccess.make_dir_recursive_absolute(temp_path)
 		if err != OK:
-			push_error("Failed to create temp session directory: " + temp_path)
+			push_error("Failed to create temp campaign directory: " + temp_path)
 			return err
 	
 	_path = temp_path
-	var save_err := save_session_info()
+	var save_err := save_campaign_info()
 	if save_err != OK:
 		_cleanup_temp(temp_path)
 		_path = final_path
@@ -97,7 +97,7 @@ func _create_new_on_disk() -> Error:
 	
 	var rename_err := DirAccess.rename_absolute(temp_path, final_path)
 	if rename_err != OK:
-		push_error("Failed to finalize session directory rename.")
+		push_error("Failed to finalize campaign directory rename.")
 		_cleanup_temp(temp_path)
 		return rename_err
 	
@@ -107,12 +107,12 @@ func _cleanup_temp(temp_path: String) -> void:
 	if DirAccess.dir_exists_absolute(temp_path):
 		DirAccess.remove_absolute(temp_path)
 
-func _load_session_info() -> Error:
-	var res := load_session_info(path)
+func _load_campaign_info() -> Error:
+	var res := load_campaign_info(path)
 	if res.error != OK:
 		return res.error
 	var parsed = res.value
-	_session_name = parsed["name"]
+	_campaign_name = parsed["name"]
 	_id = parsed["id"]
 	_description = parsed["desc"]
 	_preview_image_path = parsed["preview"]
@@ -120,59 +120,59 @@ func _load_session_info() -> Error:
 		add_tag(tag)
 	return OK
 
-func _setup_new(name: String, session_id: String) -> void:
-	_session_name = name
+func _setup_new(name: String, campaign_id: String) -> void:
+	_campaign_name = name
 	if name.is_empty():
-		_session_name = "Session"
-	_id = session_id
-	if session_id.is_empty():
+		_campaign_name = "Campaign"
+	_id = campaign_id
+	if campaign_id.is_empty():
 		_id = FileUtils.generate_uuid_v4()
 	
-	var safe_name := FileUtils.sanitize_filename(_session_name)
-	var base_path := SessionManager.SESSIONS_PATH.path_join(safe_name)
-	var session_path := base_path
+	var safe_name := FileUtils.sanitize_filename(_campaign_name)
+	var base_path := CampaignManager.SESSIONS_PATH.path_join(safe_name)
+	var campaign_path := base_path
 	var num := 1
-	while DirAccess.dir_exists_absolute(session_path):
-		session_path = base_path + "(" + str(num) + ")"
+	while DirAccess.dir_exists_absolute(campaign_path):
+		campaign_path = base_path + "(" + str(num) + ")"
 		num += 1
-	_path = session_path
+	_path = campaign_path
 #endregion
 
 #region Static Methods
-static func create_session(name: String, session_id: String="") -> Result:
-	var session := Session.new()
-	session._setup_new(name, session_id)
-	var err = session._create_new_on_disk()
+static func create_campaign(name: String, campaign_id: String="") -> Result:
+	var campaign := Campaign.new()
+	campaign._setup_new(name, campaign_id)
+	var err = campaign._create_new_on_disk()
 	if err != OK:
 		return Result.new(err)
-	return Result.new(OK, session)
+	return Result.new(OK, campaign)
 
-static func load_session(session_path: String) -> Result:
-	if session_path.is_empty() or not DirAccess.dir_exists_absolute(session_path):
-		push_error("Failed to load session: invalid path")
+static func load_campaign(campaign_path: String) -> Result:
+	if campaign_path.is_empty() or not DirAccess.dir_exists_absolute(campaign_path):
+		push_error("Failed to load campaign: invalid path")
 		return Result.new(ERR_FILE_BAD_PATH)
 	
-	var session = Session.new()
-	session._path = session_path
-	var load_err := session._load_session_info()
+	var campaign = Campaign.new()
+	campaign._path = campaign_path
+	var load_err := campaign._load_campaign_info()
 	if load_err != OK:
 		return Result.new(load_err)
 	
-	return Result.new(OK,session)
+	return Result.new(OK,campaign)
 
-static func load_session_info(session_path: String) -> Result:
-	var res := FileUtils.load_json_file(session_path.path_join(SessionManager.INFO_NAME))
+static func load_campaign_info(campaign_path: String) -> Result:
+	var res := FileUtils.load_json_file(campaign_path.path_join(CampaignManager.INFO_NAME))
 	var json = res.value
 	if json.is_empty():
 		return Result.new(res.error)
 	
 	var parsed = JSON.parse_string(json)
 	if parsed == null or typeof(parsed) != TYPE_DICTIONARY:
-		push_error("Failed to load session info: Could not parse json")
+		push_error("Failed to load campaign info: Could not parse json")
 		return Result.new(ERR_PARSE_ERROR)
 	
 	if not parsed.has_all(INFO_KEYS):
-		push_error("Failed to load session info: Invalid or missing data")
+		push_error("Failed to load campaign info: Invalid or missing data")
 		return Result.new(ERR_INVALID_DATA)
 
 	return Result.new(OK,parsed)

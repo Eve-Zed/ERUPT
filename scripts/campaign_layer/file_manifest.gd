@@ -1,7 +1,7 @@
 extends FileRegistry
-## Represents the authoritative list of files shared within a session.
+## Represents the authoritative list of files shared within a campaign.
 ##
-## A FileManifest defines which files should exist for a synchronized session.
+## A FileManifest defines which files should exist for a synchronized campaign.
 ## It is generated from a [FileCache] (index) and distributed to peers.
 ## [br][b]Note:[/b] Manifests are locked and immutable after creation.
 class_name FileManifest
@@ -24,13 +24,13 @@ enum FileAction {
 ## [br][b]Note:[/b] Don't use this constructor directly, generate a manifest with a [FileCache] 
 ## by calling [method generate_from_index] instead
 func _init(path: String, registry: Dictionary[String, FileMetadata]) -> void:
-	super(path, SessionManager.MANIFEST_NAME)
+	super(path, CampaignManager.MANIFEST_NAME)
 	_set_registry(registry)
 	_locked = true
 #endregion
 
 #region Static Functions
-## Used by the session host to generate the authoritative manifest before distributing it to peers.
+## Used by the campaign host to generate the authoritative manifest before distributing it to peers.
 ## [br][br][b]Parameters:[/b]
 ## [br][param index]: The source [FileCache].
 ## [br][br][b]Returns:[/b]
@@ -47,7 +47,7 @@ static func generate_from_index(index: FileCache) -> Result:
 ## Computes the difference between a manifest and a local cache. This includes files that don't exist
 ## in the cache, files that have differing metadata and files that are not in the manifest but the cache.
 ## [br][br][b]Parameters[/b]
-## [br][param manifest]: The authoritative session manifest.
+## [br][param manifest]: The authoritative campaign manifest.
 ## [br][param cache]: The local [FileCache]
 ## [br][br][b]Returns:[/b]
 ## [br]A [Dictionary] mapping file paths ([String]) to [enum FileAction] values.

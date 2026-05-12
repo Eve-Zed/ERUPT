@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c6ddusa6nfilg"]
 
-[ext_resource type="Script" uid="uid://d3a4h4n4vmrwv" path="res://scripts/UI/session_editor.gd" id="1_qd8gs"]
+[ext_resource type="Script" uid="uid://d3a4h4n4vmrwv" path="res://scripts/UI/campaign_editor.gd" id="1_qd8gs"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qd8gs"]
 

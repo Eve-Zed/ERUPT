@@ -25,7 +25,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 EventQueueUI="*res://scripts/UI/event_queue_ui.gd"
-SessionManager="*res://scripts/sessions_layer/session_manager.gd"
+CampaignManager="*res://scripts/campaign_layer/campaign_manager.gd"
 ProfileManager="*res://scripts/network_layer/profile_manager.gd"
 NetworkManager="*res://scripts/network_layer/network_manager.gd"
 FileManager="*uid://cpph6c77ivufj"

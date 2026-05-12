@@ -9,7 +9,7 @@ signal main_menu_opened
 signal lobby_created
 signal lobby_joined
 signal file_dialog_opened
-signal sessions_opened
+signal campaigns_opened
 
 enum UIAction {
 	CREATE_LOBBY,
@@ -46,4 +46,4 @@ func request_action(action: UIAction) -> void:
 		UIAction.OPEN_FILE_DIALOG:
 			file_dialog_opened.emit()
 		UIAction.OPEN_SESSIONS:
-			sessions_opened.emit()
+			campaigns_opened.emit()

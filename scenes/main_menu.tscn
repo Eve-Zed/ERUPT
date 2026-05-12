@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://uktq16q4tlnq" path="res://scenes/create_lobby.tscn" id="4_oa1go"]
 [ext_resource type="PackedScene" uid="uid://dilxa0yvm0j6j" path="res://scenes/join_lobby.tscn" id="5_8ln24"]
 [ext_resource type="PackedScene" uid="uid://idxjat64qndh" path="res://scenes/edit_profile.tscn" id="6_rtw2f"]
-[ext_resource type="PackedScene" uid="uid://c6ddusa6nfilg" path="res://scenes/edit_sessions.tscn" id="7_oa1go"]
+[ext_resource type="PackedScene" uid="uid://c6ddusa6nfilg" path="res://scenes/edit_campaigns.tscn" id="7_oa1go"]
 
 [node name="MainMenu" type="Node2D" unique_id=1251033609]
 

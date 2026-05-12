@@ -45,7 +45,7 @@ func _update_address_label() -> void:
 	server_address.text = ip+":"+str(port)
 
 func _on_start_game() -> void:
-	NetworkManager.join_session(ip,port)
+	NetworkManager.join_campaign(ip,port)
 	visible = false
 	var connection_successful = await NetworkManager.connection_attempted
 	if connection_successful:
