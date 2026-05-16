@@ -1,28 +1,21 @@
-extends RefCounted
+extends Node
 class_name FileMetadata
-
-static var metadata_keys := ["hash","size","prio"]
-
-
 
 var file_hash: String
 var size: int
 var prio: int
+var global: bool
+var campaigns: PackedStringArray
 
-func _init(_file_hash: String, _size: int, _prio: int) -> void:
+func _init(_file_hash: String, _size: int, _prio: int, _global: bool, _campaigns: PackedStringArray) -> void:
 	file_hash = _file_hash
 	size = _size
 	prio = _prio
-
-func to_dictionary() -> Dictionary:
-	return {
-		"hash": file_hash,
-		"size": size,
-		"prio": prio,
-	}
-
-static func create_from_dictionary(dict: Dictionary) -> FileMetadata:
-	var d_size := int(dict["size"])
-	var d_prio := int(dict["prio"])
-	var metadata := FileMetadata.new(dict["hash"], d_size, d_prio)
-	return metadata
+	global = _global
+	campaigns = _campaigns
+	
+func to_dictionary():
+	pass
+	
+static func create_from_dictionary(_dict: Dictionary):
+	pass
