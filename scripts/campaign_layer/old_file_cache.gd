@@ -1,5 +1,4 @@
 extends FileRegistry
-class_name FileIndex
 
 func _init(path: String) -> void:
 	super(path, FileCacheManager.INDEX_NAME)
