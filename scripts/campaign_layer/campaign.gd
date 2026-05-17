@@ -126,7 +126,7 @@ func _setup_new(name: String, campaign_id: String) -> void:
 		_campaign_name = "Campaign"
 	_id = campaign_id
 	if campaign_id.is_empty():
-		_id = FileUtils.generate_uuid_v4()
+		_id = GameUtils.generate_uuid_v4()
 	
 	var safe_name := FileUtils.sanitize_filename(_campaign_name)
 	var base_path := CampaignManager.SESSIONS_PATH.path_join(safe_name)

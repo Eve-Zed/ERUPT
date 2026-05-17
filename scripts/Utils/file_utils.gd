@@ -6,30 +6,6 @@ static var load_error_prefix := "Failed to load file: "
 
 static var hash_chunk_size = 1024
 
-static func generate_uuid_v4() -> String:
-	var bytes := PackedByteArray()
-	bytes.resize(16)
-
-	for i in range(16):
-		bytes[i] = randi() & 0xFF
-
-	# Version 4
-	bytes[6] = (bytes[6] & 0x0F) | 0x40
-	# Variant
-	bytes[8] = (bytes[8] & 0x3F) | 0x80
-
-	var hex := ""
-	for i in range(16):
-		hex += "%02x" % bytes[i]
-
-	return "%s-%s-%s-%s-%s" % [
-		hex.substr(0, 8),
-		hex.substr(8, 4),
-		hex.substr(12, 4),
-		hex.substr(16, 4),
-		hex.substr(20, 12)
-	]
-
 static func atomic_save(path: String, data: Variant) -> Error:
 	if path.is_empty():
 		push_error(save_error_prefix + "Path is empty")

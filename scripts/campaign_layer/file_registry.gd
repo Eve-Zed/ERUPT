@@ -55,8 +55,8 @@ func load_registry() -> Error:
 	_file_registry = _build_registry(parsed)
 	return OK
 
-func add_file(_file_path: String, _prio: int = -1) -> Error:
-	return OK
+func add_file(_file_path: String, metadata: FileMetadata) -> void:
+	pass
 
 static func validate_registry(data: Dictionary) -> Error:
 	#TODO implement method
