@@ -20,3 +20,4 @@ func _on_button_pressed() -> void:
 func _on_file_dialog_confirmed(paths: PackedStringArray) -> void:
 	for p in paths:
 		print(p)
+		FileManager.add_file_to_campaigns(p,[CampaignManager.campaigns.keys()[campaigns_options_button.get_selected_id()]])

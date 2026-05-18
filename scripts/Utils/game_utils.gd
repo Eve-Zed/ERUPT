@@ -26,3 +26,7 @@ static func generate_uuid_v4() -> String:
 		hex.substr(16, 4),
 		hex.substr(20, 12)
 	]
+	
+static func get_priority(file_path: String) -> int:
+	#TODO actually write this method
+	return 1

@@ -130,7 +130,3 @@ static func remove_recursive(directory: String) -> void:
 		DirAccess.remove_absolute(directory.path_join(file_name))
 		
 	DirAccess.remove_absolute(directory)
-
-static func get_file_priority(file_path: String) -> int:
-	#TODO actually write this method
-	return 1
