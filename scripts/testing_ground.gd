@@ -13,6 +13,8 @@ func _ready() -> void:
 	for s in CampaignManager.campaigns:
 		campaigns_options_button.add_item(CampaignManager.campaigns[s].get_file(),id)
 		id += 1
+		
+	print(str(FileManager.file_index.size()))
 
 func _on_button_pressed() -> void:
 	file_dialog.visible = true
@@ -20,3 +22,4 @@ func _on_button_pressed() -> void:
 func _on_file_dialog_confirmed(paths: PackedStringArray) -> void:
 	for p in paths:
 		print(p)
+		FileManager.add_file(p,[CampaignManager.campaigns.keys()[campaigns_options_button.get_selected_id()]])

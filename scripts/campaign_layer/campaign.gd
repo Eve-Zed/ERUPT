@@ -162,19 +162,17 @@ static func load_campaign(campaign_path: String) -> Result:
 
 static func load_campaign_info(campaign_path: String) -> Result:
 	var res := FileUtils.load_json_file(campaign_path.path_join(CampaignManager.INFO_NAME))
-	var json = res.value
-	if json.is_empty():
+	if res.error != OK:
 		return Result.new(res.error)
-	
-	var parsed = JSON.parse_string(json)
-	if parsed == null or typeof(parsed) != TYPE_DICTIONARY:
+	var json = res.value
+	if typeof(json) != TYPE_DICTIONARY:
 		push_error("Failed to load campaign info: Could not parse json")
 		return Result.new(ERR_PARSE_ERROR)
 	
-	if not parsed.has_all(INFO_KEYS):
+	if not json.has_all(INFO_KEYS):
 		push_error("Failed to load campaign info: Invalid or missing data")
 		return Result.new(ERR_INVALID_DATA)
 
-	return Result.new(OK,parsed)
+	return Result.new(OK,json)
 #endregion
 	

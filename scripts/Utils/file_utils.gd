@@ -63,7 +63,7 @@ static func load_json_file(path: String) -> Result:
 		push_error(load_error_prefix + "Could not parse json " + path)
 		return Result.new(ERR_PARSE_ERROR)
 
-	return Result.new(OK, JSON.stringify(parsed))
+	return Result.new(OK, parsed)
 
 static func load_file(file_path: String) -> Result:
 	if file_path.is_empty() or not file_path.is_absolute_path():
@@ -92,15 +92,15 @@ static func delete_file(path: String) -> Error:
 		return err
 	return OK
 
-static func hash_file(path) -> String:
-	if not FileAccess.file_exists(path):
-		push_error(load_error_prefix + "File does not exist " + path)
+static func hash_file(file_path: String) -> String:
+	if not FileAccess.file_exists(file_path):
+		push_error(load_error_prefix + "File does not exist " + file_path)
 		return ""
 
 	var ctx := HashingContext.new()
 	ctx.start(HashingContext.HASH_SHA256)
 
-	var file := FileAccess.open(path, FileAccess.READ)
+	var file := FileAccess.open(file_path, FileAccess.READ)
 
 	while file.get_position() < file.get_length():
 		var remaining = file.get_length() - file.get_position()
@@ -130,7 +130,3 @@ static func remove_recursive(directory: String) -> void:
 		DirAccess.remove_absolute(directory.path_join(file_name))
 		
 	DirAccess.remove_absolute(directory)
-
-static func get_file_priority(file_path: String) -> int:
-	#TODO actually write this method
-	return 1
