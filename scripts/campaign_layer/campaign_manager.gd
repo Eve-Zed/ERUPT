@@ -1,6 +1,6 @@
 extends Node
 
-const SESSIONS_PATH := "user://campaigns"
+const CAMPAIGNS_PATH := "user://campaigns"
 const INFO_NAME := "campaign_info.json"
 
 var _campaigns: Dictionary[String, String] = {} 	#id -> path
@@ -19,6 +19,8 @@ var active_campaign: Campaign:
 		return _active_campaign
 
 func _ready() -> void:
+	if !DirAccess.dir_exists_absolute(CAMPAIGNS_PATH):
+		DirAccess.make_dir_recursive_absolute(CAMPAIGNS_PATH)
 	_campaigns = _get_campaigns_from_disc()
 
 func create_campaign(campaign_name: String) -> Error:
@@ -50,10 +52,10 @@ func delete_campaign(id: String) -> Error:
 
 func _get_campaigns_from_disc() ->  Dictionary[String, String]:
 	var campaign_dict: Dictionary[String, String] = {}
-	var campaign_dirs := DirAccess.get_directories_at(SESSIONS_PATH)
+	var campaign_dirs := DirAccess.get_directories_at(CAMPAIGNS_PATH)
 	for campaign in campaign_dirs:
-		if FileAccess.file_exists(SESSIONS_PATH.path_join(campaign).path_join(INFO_NAME)):
-			var result := Campaign.load_campaign_info(SESSIONS_PATH.path_join(campaign))
+		if FileAccess.file_exists(CAMPAIGNS_PATH.path_join(campaign).path_join(INFO_NAME)):
+			var result := Campaign.load_campaign_info(CAMPAIGNS_PATH.path_join(campaign))
 			if result.error == OK and result.value.has("id"):
-				campaign_dict[result.value["id"]] = SESSIONS_PATH.path_join(campaign)
+				campaign_dict[result.value["id"]] = CAMPAIGNS_PATH.path_join(campaign)
 	return campaign_dict
