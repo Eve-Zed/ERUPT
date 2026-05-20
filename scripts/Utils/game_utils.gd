@@ -30,3 +30,9 @@ static func generate_uuid_v4() -> String:
 static func get_file_priority(file_path: String) -> int:
 	#TODO actually write this method
 	return 1
+
+static func arrays_share_value(a: Array, b: Array) -> bool:
+	for value in a:
+		if value in b:
+			return true
+	return false

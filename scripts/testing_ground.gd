@@ -15,6 +15,7 @@ func _ready() -> void:
 		id += 1
 		
 	print(str(FileManager.file_index.size()))
+	ManifestBuilder.save_manifest("2d3de003-65ab-4f25-851d-ddec44e4f53a", "test")
 
 func _on_button_pressed() -> void:
 	file_dialog.visible = true

@@ -123,6 +123,16 @@ static func sanitize_filename(file_name: String, max_length: int = 64) -> String
 	sanitized = result.substr(0, max_length)
 	return sanitized
 
+static func get_file_size(file_path: String) -> int:
+	if not FileAccess.file_exists(file_path):
+		return -1
+	
+	var file := FileAccess.open(file_path, FileAccess.READ)
+	if file == null:
+		return -1
+	
+	return file.get_length()
+
 static func remove_recursive(directory: String) -> void:
 	for dir_name in DirAccess.get_directories_at(directory):
 		remove_recursive(directory.path_join(dir_name))

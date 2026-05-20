@@ -1,10 +1,16 @@
-extends FileMetadata
+extends RefCounted
 class_name IndexMetadata
 
+const KEY_HASH := "hash"
+const KEY_PRIORITY := "prio"
+const KEY_CAMPAIGNS := "campaigns"
 const KEY_VISIBILITY := "visibility"
 const KEY_DESCRIPTION := "desc"
 const KEY_TAGS := "tags"
 
+var file_hash: String
+var priority: int
+var campaigns: PackedStringArray #Array for Campaign IDs - leave empty to make file global
 var visibility: PackedStringArray #Array of User/Group IDs - leave empty for no visibility restrictions
 var description: String
 var tags: PackedStringArray

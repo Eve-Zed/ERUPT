@@ -129,7 +129,7 @@ func _setup_new(name: String, campaign_id: String) -> void:
 		_id = GameUtils.generate_uuid_v4()
 	
 	var safe_name := FileUtils.sanitize_filename(_campaign_name)
-	var base_path := CampaignManager.SESSIONS_PATH.path_join(safe_name)
+	var base_path := CampaignManager.CAMPAIGNS_PATH.path_join(safe_name)
 	var campaign_path := base_path
 	var num := 1
 	while DirAccess.dir_exists_absolute(campaign_path):

@@ -3,7 +3,6 @@ extends Node
 
 const FILES_PATH := "user://files"
 const INDEX_NAME := "file_index.json" #All addded files are recorded here in the format path -> metadata
-const MANIFEST_NAME_SUFFIX := ".json" #Will be created for each campaign and user to handle file sharing, CampaignID + UserID + Suffix
 
 var _file_index: Dictionary[String, IndexMetadata] = {}
 
@@ -21,7 +20,7 @@ func _ready() -> void:
 
 func add_file(file_path: String, campaigns: PackedStringArray = [], visibility: PackedStringArray = [], 
 description: String = "", tags: PackedStringArray = []) -> Error:
-	if !FileAccess.file_exists(file_path):
+	if not FileAccess.file_exists(file_path):
 		push_error("Could not add file: %s does not exist" % [file_path])
 		return ERR_FILE_NOT_FOUND
 		
@@ -49,7 +48,7 @@ func get_file_metadata(file_path: String) -> IndexMetadata:
 	return _file_index[file_path]
 
 func modify_file_metadata(file_path: String, metadata: IndexMetadata) -> Error:
-	if !_file_index.has(file_path):
+	if not _file_index.has(file_path):
 		return ERR_FILE_NOT_FOUND
 	_file_index[file_path] = metadata
 	return _save_file_index()
