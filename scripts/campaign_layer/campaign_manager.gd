@@ -1,4 +1,5 @@
 extends Node
+#Autoload class_name CampaignManager
 
 const CAMPAIGNS_PATH := "user://campaigns"
 const INFO_NAME := "campaign_info.json"
