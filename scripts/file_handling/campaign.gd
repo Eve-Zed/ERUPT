@@ -175,4 +175,3 @@ static func load_campaign_info(campaign_path: String) -> Result:
 
 	return Result.new(OK,json)
 #endregion
-	

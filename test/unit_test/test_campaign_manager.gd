@@ -39,12 +39,9 @@ class MockFileAccessError:
 		return true
 
 func before_each():
-	manager = CampaignManagerScript.new() as CampaignManager
+	manager = autofree(CampaignManagerScript.new())
 
-func after_each():
-	manager.queue_free()
-
-#done to avoid orphans
+#done so there are no orphans
 func after_all():
 	ProfileManager._player_info.queue_free()
 
