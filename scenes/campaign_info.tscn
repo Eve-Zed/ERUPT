@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cvuv414x740wg"]
 
-[ext_resource type="Script" uid="uid://dtmqkno6xs50l" path="res://scripts/UI/campaign_info_ui.gd" id="1_j83h7"]
+[ext_resource type="Script" uid="uid://dtmqkno6xs50l" path="res://scripts/ui/campaign_info_ui.gd" id="1_j83h7"]
 [ext_resource type="Texture2D" uid="uid://dyohsyomslrt5" path="res://assets/gui/default_scene.png" id="2_smrbs"]
 
 [node name="Button" type="Button" unique_id=864914957]

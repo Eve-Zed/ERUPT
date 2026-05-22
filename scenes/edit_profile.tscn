@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://idxjat64qndh"]
 
 [ext_resource type="Texture2D" uid="uid://vnfkfdwoxyew" path="res://assets/gui/default_profile_picture.png" id="1_2n7oj"]
-[ext_resource type="Script" uid="uid://dg8t2vw5uh36f" path="res://scripts/UI/profile_editor.gd" id="1_np11a"]
-[ext_resource type="Script" uid="uid://cfwaexuqo21rx" path="res://scripts/UI/button_controller.gd" id="2_np11a"]
+[ext_resource type="Script" uid="uid://dg8t2vw5uh36f" path="res://scripts/ui/profile_editor.gd" id="1_np11a"]
+[ext_resource type="Script" uid="uid://cfwaexuqo21rx" path="res://scripts/ui/button_controller.gd" id="2_np11a"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ytcut"]
 

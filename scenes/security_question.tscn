@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwy8sggkhrsmt"]
+[gd_scene format=3 uid="uid://cwy8sggkhrsmt"]
 
-[ext_resource type="Script" uid="uid://2gamev3xucox" path="res://scripts/UI/security_question.gd" id="1_2xlmu"]
-[ext_resource type="Script" uid="uid://cfwaexuqo21rx" path="res://scripts/UI/button_controller.gd" id="2_bp8bb"]
+[ext_resource type="Script" uid="uid://2gamev3xucox" path="res://scripts/ui/security_question.gd" id="1_2xlmu"]
+[ext_resource type="Script" uid="uid://cfwaexuqo21rx" path="res://scripts/ui/button_controller.gd" id="2_bp8bb"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gu13u"]
 
