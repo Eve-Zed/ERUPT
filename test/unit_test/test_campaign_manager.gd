@@ -12,6 +12,8 @@ class MockCampaign:
 		fake_campaign._campaign_name = "Test Campaign"
 	
 	static func create_campaign(_name: String):
+		if _name == "Error Campaign":
+			return Result.new(ERR_CANT_CREATE)
 		setup_fake_campaign()
 		return Result.new(OK, fake_campaign)
 		
@@ -20,9 +22,6 @@ class MockCampaign:
 		return Result.new(OK, fake_campaign)
 
 class MockCampaignError:
-	static func create_campaign(_name: String):
-		return Result.new(ERR_CANT_CREATE)
-	
 	static func load_campaign(_path: String):
 		return Result.new(ERR_FILE_CANT_OPEN)
 
@@ -61,9 +60,9 @@ func test_create_campaign_adds_campaign_and_sets_active():
 	assert_eq(manager.active_id,"000-000","the active campaing should have the right id")
 
 func test_create_campaign_returns_error_when_creation_fails():
-	manager.campaign_class = MockCampaignError
+	manager.campaign_class = MockCampaign
 	
-	var err = manager.create_campaign("Test Campaign")
+	var err = manager.create_campaign("Error Campaign")
 	
 	assert_push_error_count(1, "can't create error should be pushed")
 	assert_eq(err,ERR_CANT_CREATE,"should return the right error")

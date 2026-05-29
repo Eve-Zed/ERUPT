@@ -1,5 +1,8 @@
 extends Node
 #Autoload class_name CampaignManager
+
+#TODO instead of throwing errors make an alert class to handle that
+
 const INFO_NAME := "campaign_info.json"
 
 var campaigns_path := "user://campaigns"

@@ -20,7 +20,7 @@ static func atomic_save(path: String, data: Variant) -> Error:
 	
 	var temp_path := path.get_basename() + ".tmp"
 	
-	var file := FileAccess.open(temp_path,FileAccess.WRITE)
+	var file := FileAccess.open(temp_path, FileAccess.WRITE)
 	if file == null:
 		var open_err := FileAccess.get_open_error()
 		push_error(save_error_prefix + "Could not open %s (%s)" % [temp_path, open_err])

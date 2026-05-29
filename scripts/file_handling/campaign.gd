@@ -3,7 +3,6 @@ class_name Campaign
 
 #region Constants
 const INFO_KEYS := ["name","id","desc","preview","tags"] #keys for campaign info file
-const MAX_DESC_LENGHT := 256
 #endregion
 
 #region Variables
@@ -13,6 +12,17 @@ var _path: String #Folder for all campaign files
 var _description: String #Optional, user chosen
 var _preview_image_path: String #Optional, user chosen
 var _tags: Array[String] = [] #Optional, user chosen
+
+var max_desc_length := 256
+
+#for dependency injection to make unit testing easier
+var file_utils_class := FileUtils
+var dir_access_class := DirAccess
+var game_utils_class := GameUtils
+
+static var s_file_utils_class := FileUtils
+static var s_dir_access_class := DirAccess
+static var s_campaign_class := Campaign
 #endregion
 
 #region Getter and Setter
@@ -27,12 +37,12 @@ var path: String:
 		return _path
 var info_path: String: #path for campaign info file
 	get:
-		return _path.path_join(CampaignManager.INFO_NAME)
+		return path.path_join(CampaignManager.INFO_NAME)
 var description: String:
 	get:
 		return _description
 	set(value):
-		_description = value.substr(0, MAX_DESC_LENGHT)
+		_description = value.substr(0, max_desc_length)
 var preview_image_path: String:
 	get:
 		return _preview_image_path
@@ -59,14 +69,14 @@ func save_campaign_info() -> Error:
 				"desc": _description,
 				"preview": _preview_image_path,
 				"tags": _tags} 
-	return FileUtils.atomic_save(info_path,JSON.stringify(data))
+	return file_utils_class.atomic_save(info_path, JSON.stringify(data))
 
 func update_campaign_info(s_name: String = "", s_desc: String = "", s_tags: Array[String] = []) -> Error:
 	if not s_name.is_empty():
-		campaign_name = s_name
+		_campaign_name = s_name
 	if not s_desc.is_empty():
 		description = s_desc
-	if not tags.is_empty():
+	if not s_tags.is_empty():
 		tags = s_tags
 	return save_campaign_info()
 #endregion
@@ -76,13 +86,10 @@ func _create_new_on_disk() -> Error:
 	var final_path := _path
 	var temp_path := final_path + ".tmp"
 	
-	if DirAccess.dir_exists_absolute(temp_path):
-		var err = DirAccess.remove_absolute(temp_path)
-		if err != OK:
-			return err
+	_cleanup_temp(temp_path)
 
-	if not DirAccess.dir_exists_absolute(_path):
-		var err := DirAccess.make_dir_recursive_absolute(temp_path)
+	if not dir_access_class.dir_exists_absolute(temp_path):
+		var err := dir_access_class.make_dir_recursive_absolute(temp_path)
 		if err != OK:
 			push_error("Failed to create temp campaign directory: " + temp_path)
 			return err
@@ -92,10 +99,11 @@ func _create_new_on_disk() -> Error:
 	if save_err != OK:
 		_cleanup_temp(temp_path)
 		_path = final_path
+		push_error("Failed to save campaign_info.json.")
 		return save_err
 	_path = final_path
 	
-	var rename_err := DirAccess.rename_absolute(temp_path, final_path)
+	var rename_err := dir_access_class.rename_absolute(temp_path, final_path)
 	if rename_err != OK:
 		push_error("Failed to finalize campaign directory rename.")
 		_cleanup_temp(temp_path)
@@ -104,18 +112,18 @@ func _create_new_on_disk() -> Error:
 	return OK
 
 func _cleanup_temp(temp_path: String) -> void:
-	if DirAccess.dir_exists_absolute(temp_path):
-		DirAccess.remove_absolute(temp_path)
+	if dir_access_class.dir_exists_absolute(temp_path):
+		file_utils_class.remove_recursive(temp_path)
 
 func _load_campaign_info() -> Error:
-	var res := load_campaign_info(path)
+	var res := s_campaign_class.load_campaign_info(path)
 	if res.error != OK:
 		return res.error
 	var parsed = res.value
 	_campaign_name = parsed["name"]
 	_id = parsed["id"]
-	_description = parsed["desc"]
-	_preview_image_path = parsed["preview"]
+	description = parsed["desc"]
+	preview_image_path = parsed["preview"]
 	for tag in parsed["tags"]:
 		add_tag(tag)
 	return OK
@@ -126,13 +134,13 @@ func _setup_new(name: String, campaign_id: String) -> void:
 		_campaign_name = "Campaign"
 	_id = campaign_id
 	if campaign_id.is_empty():
-		_id = GameUtils.generate_uuid_v4()
+		_id = game_utils_class.generate_uuid_v4()
 	
-	var safe_name := FileUtils.sanitize_filename(_campaign_name)
+	var safe_name := file_utils_class.sanitize_filename(_campaign_name)
 	var base_path := CampaignManager.campaigns_path.path_join(safe_name)
 	var campaign_path := base_path
 	var num := 1
-	while DirAccess.dir_exists_absolute(campaign_path):
+	while dir_access_class.dir_exists_absolute(campaign_path):
 		campaign_path = base_path + "(" + str(num) + ")"
 		num += 1
 	_path = campaign_path
@@ -148,7 +156,7 @@ static func create_campaign(name: String, campaign_id: String="") -> Result:
 	return Result.new(OK, campaign)
 
 static func load_campaign(campaign_path: String) -> Result:
-	if campaign_path.is_empty() or not DirAccess.dir_exists_absolute(campaign_path):
+	if campaign_path.is_empty() or not s_dir_access_class.dir_exists_absolute(campaign_path):
 		push_error("Failed to load campaign: invalid path")
 		return Result.new(ERR_FILE_BAD_PATH)
 	
@@ -161,8 +169,9 @@ static func load_campaign(campaign_path: String) -> Result:
 	return Result.new(OK,campaign)
 
 static func load_campaign_info(campaign_path: String) -> Result:
-	var res := FileUtils.load_json_file(campaign_path.path_join(CampaignManager.INFO_NAME))
+	var res := s_file_utils_class.load_json_file(campaign_path.path_join(CampaignManager.INFO_NAME))
 	if res.error != OK:
+		push_error("Failed to load campaign info: Could not load json file: "+error_string(res.error))
 		return Result.new(res.error)
 	var json = res.value
 	if typeof(json) != TYPE_DICTIONARY:
