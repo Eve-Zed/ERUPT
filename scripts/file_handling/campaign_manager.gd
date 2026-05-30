@@ -82,5 +82,5 @@ func _initialise() -> void:
 	if not dir_access_class.dir_exists_absolute(campaigns_path):
 		var err := dir_access_class.make_dir_recursive_absolute(campaigns_path)
 		if not err == OK:
-			push_error("Could not create campaigns folder:" + error_string(err))
+			push_error("Could not create campaigns folder: " + error_string(err))
 	_campaigns = _get_campaigns_from_disc()

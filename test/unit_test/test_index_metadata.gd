@@ -34,6 +34,18 @@ func test_to_dictionary_has_correct_values():
     assert_eq(dict["desc"],description,"description should have the correct value")
     assert_eq(dict["tags"],tags,"tags should have the correct value")
 
+func test_equals_campares_two_objects_correctly():
+    var other := IndexMetadataScript.new(file_hash,priority,campaigns,visibility,description,tags)
+    var res = index_metadata.equals(other)
+
+    assert_eq(res,true,"the two objects should be the same")
+
+    other.file_hash = "I am another file hash"
+    var res_2 = index_metadata.equals(other)
+
+    assert_eq(res_2,false,"the two objects should not be the same")
+
+
 func test_create_from_doctionary_creates_correct_index_metadata():
     var index_metadata_2 = index_metadata.create_from_dictionary(index_metadata.to_dictionary())
 

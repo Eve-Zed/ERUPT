@@ -34,6 +34,16 @@ func to_dictionary() -> Dictionary:
 	metadata[KEY_TAGS] = tags
 	return metadata
 
+func equals(other: IndexMetadata) -> bool:
+	return (
+		file_hash == other.file_hash
+		and priority == priority
+		and campaigns == campaigns
+		and visibility == visibility
+		and description == description
+		and tags == tags
+	)
+
 static func create_from_dictionary(dict: Dictionary) -> IndexMetadata:
 	return IndexMetadata.new(
 		str(dict.get(KEY_HASH, "")),

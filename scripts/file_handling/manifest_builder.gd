@@ -27,6 +27,6 @@ static func save_manifest(campaign_id: String, user_id: String) -> Error:
 	var manifest := build_manifest(campaign_id, user_id)
 	
 	var manifest_name := campaign_id + "_" + user_id + MANIFEST_NAME_SUFFIX
-	var manifest_path := FileManager.FILES_PATH.path_join(manifest_name)
+	var manifest_path := FileManager.files_path.path_join(manifest_name)
 	
 	return FileUtils.atomic_save(manifest_path, JSON.stringify(manifest))
