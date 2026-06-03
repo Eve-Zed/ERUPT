@@ -1,6 +1,6 @@
 extends GutTest
 
-var FileUtilsScript = preload("res://scripts/utils/file_utils.gd")
+const FileUtilsScript = preload("res://scripts/utils/file_utils.gd")
 var utils
 var test_path := "user://test_file_operations"
 
