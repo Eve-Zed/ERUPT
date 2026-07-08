@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://uktq16q4tlnq"]
 
-[ext_resource type="Script" uid="uid://c3gh6ur7w38ds" path="res://scripts/UI/lobby_creator.gd" id="1_xm0k0"]
-[ext_resource type="Script" uid="uid://cfwaexuqo21rx" path="res://scripts/UI/button_controller.gd" id="2_ts81x"]
+[ext_resource type="Script" uid="uid://c3gh6ur7w38ds" path="res://scripts/ui/lobby_creator.gd" id="1_xm0k0"]
+[ext_resource type="Script" uid="uid://cfwaexuqo21rx" path="res://scripts/ui/button_controller.gd" id="2_ts81x"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b1d45"]
 

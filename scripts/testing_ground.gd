@@ -1,7 +1,26 @@
 extends Node
 
-
+@onready
+var campaigns_options_button: OptionButton = $OptionButton
+@onready
+var file_dialog: FileDialog = $FileDialog
+@onready
+var button: Button = $Button
 
 func _ready() -> void:
-	
-	print(str(SessionManager.save_file_in_session("/home/evezed/Projects/Godot/ERUPT/icon.svg",SessionManager.sessions.keys()[0])))
+	file_dialog.files_selected.connect(_on_file_dialog_confirmed)
+	var id := 0
+	for s in CampaignManager.campaigns:
+		campaigns_options_button.add_item(CampaignManager.campaigns[s].get_file(),id)
+		id += 1
+		
+	print(str(FileManager.file_index.size()))
+	ManifestBuilder.save_manifest("2d3de003-65ab-4f25-851d-ddec44e4f53a", "test")
+
+func _on_button_pressed() -> void:
+	file_dialog.visible = true
+
+func _on_file_dialog_confirmed(paths: PackedStringArray) -> void:
+	for p in paths:
+		print(p)
+		FileManager.add_file(p,[CampaignManager.campaigns.keys()[campaigns_options_button.get_selected_id()]])

@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://cvuv414x740wg"]
+
+[ext_resource type="Script" uid="uid://dtmqkno6xs50l" path="res://scripts/ui/campaign_info_ui.gd" id="1_j83h7"]
+[ext_resource type="Texture2D" uid="uid://dyohsyomslrt5" path="res://assets/gui/default_scene.png" id="2_smrbs"]
+
+[node name="Button" type="Button" unique_id=864914957]
+z_index = 1
+custom_minimum_size = Vector2(144, 144)
+offset_right = 145.0
+offset_bottom = 116.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("1_j83h7")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1472848110]
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 114.0
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=900948692]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1973846428]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1240992082]
+custom_minimum_size = Vector2(128, 64)
+layout_mode = 2
+texture = ExtResource("2_smrbs")
+expand_mode = 5
+stretch_mode = 6
+
+[node name="SessionName" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1417060344]
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+clip_text = true
+
+[node name="SessionDesc" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=826352894]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+mouse_filter = 1
+theme_override_font_sizes/font_size = 8
+autowrap_mode = 2
+clip_text = true
+max_lines_visible = 3
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

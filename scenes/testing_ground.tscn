@@ -1,6 +1,30 @@
-[gd_scene load_steps=2 format=3 uid="uid://leo62jkccmoy"]
+[gd_scene format=3 uid="uid://leo62jkccmoy"]
 
 [ext_resource type="Script" uid="uid://dpqfsrx36juo" path="res://scripts/testing_ground.gd" id="1_lknbb"]
 
-[node name="TestingGround" type="Node2D"]
+[node name="TestingGround" type="Node2D" unique_id=1656018306]
 script = ExtResource("1_lknbb")
+
+[node name="Button" type="Button" parent="." unique_id=1142183845]
+offset_left = 100.0
+offset_top = 75.0
+offset_right = 216.0
+offset_bottom = 103.0
+text = "Add File"
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1859227902]
+oversampling_override = 1.0
+title = "Select File(s)"
+ok_button_text = "Select"
+dialog_hide_on_ok = true
+file_mode = 1
+access = 2
+
+[node name="OptionButton" type="OptionButton" parent="." unique_id=81185977]
+offset_left = 100.0
+offset_top = 42.0
+offset_right = 212.0
+offset_bottom = 62.0
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="confirmed" from="FileDialog" to="." method="_on_file_dialog_confirmed"]

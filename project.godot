@@ -24,10 +24,11 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-EventQueueUI="*res://scripts/UI/event_queue_ui.gd"
-SessionManager="*res://scripts/sessions_layer/session_manager.gd"
-ProfileManager="*res://scripts/network_layer/profile_manager.gd"
-NetworkManager="*res://scripts/network_layer/network_manager.gd"
+EventQueueUI="*res://scripts/ui/event_queue_ui.gd"
+CampaignManager="*res://scripts/file_handling/campaign_manager.gd"
+ProfileManager="*res://scripts/network/profile_manager.gd"
+NetworkManager="*res://scripts/network/network_manager.gd"
+FileManager="*uid://brlw8l2dyh1bp"
 
 [display]
 
@@ -36,6 +37,10 @@ window/size/viewport_height=360
 window/size/window_width_override=1920
 window/size/window_height_override=1080
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
 [internationalization]
 

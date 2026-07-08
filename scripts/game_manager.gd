@@ -12,8 +12,8 @@ func _ready() -> void:
 	_update_label()
 	
 func _update_label(_id=0) -> void:
-	#NetworkManager.session.session_name + 
-	label.text = NetworkManager.session.session_name + "\n Joined Players:"
+	#NetworkManager.campaign.campaign_name + 
+	label.text = NetworkManager.campaign.campaign_name + "\n Joined Players:"
 	for id in NetworkManager.players:
 		var player = NetworkManager.players[id]
 		label.text += "\n" + player["name"] + " | id:" + str(id)
